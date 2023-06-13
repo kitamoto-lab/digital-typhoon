@@ -6,11 +6,11 @@ This page summarizes the official release of the Digital Typhoon dataset, the lo
 
 ## Dataset
 
-The dataset is available at [Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/).
+[Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. The dataset comprises a total of 1,099 typhoons and 189,364 infrared images from the western Pacific basin.
 
 ## Software
 
-We released a machine learning library for the Digital Typhoon Dataset at [pyphoon2](https://github.com/kitamoto-lab/pyphoon2).
+[pyphoon2](https://github.com/kitamoto-lab/pyphoon2) is a machine learning library for the Digital Typhoon Dataset. 
 
 ## Website
 
