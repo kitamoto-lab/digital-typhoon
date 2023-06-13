@@ -12,3 +12,7 @@ The dataset is available at [Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/
 
 We released machine learning library for the Digital Typhoon Dataset at [pyphoon2](https://github.com/kitamoto-lab/pyphoon2).
 
+## Website
+
+[Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/) is one of the most popular and largest typhoon information website in Japan. The annual page view is around 20 million, and many people visit the website not only to check the latest information but also study the historical data. 
+
