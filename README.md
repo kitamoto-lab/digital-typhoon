@@ -33,7 +33,7 @@ doi: [10.20783/DIAS.664](https://doi.org/10.20783/DIAS.664)
 
 ## Software
 
-[pyphoon2](https://github.com/kitamoto-lab/pyphoon2) is a machine-learning library for the Digital Typhoon Dataset. 
+[pyphoon2](https://github.com/kitamoto-lab/pyphoon2) is a machine-learning library for the Digital Typhoon Dataset. The documentation of the library is available at [pyphoon2’s documentation at readthedocs](https://pyphoon2.readthedocs.io/en/latest/).
 
 ## Model
 
