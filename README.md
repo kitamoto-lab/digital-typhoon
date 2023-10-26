@@ -39,10 +39,10 @@ doi: [10.20783/DIAS.664](https://doi.org/10.20783/DIAS.664)
 
 [Hugging Face](https://huggingface.co/kitamoto-lab) provides model weights for machine learning tasks.
 
+## Data Repository
+
+[Digital Typhoon Dataset](https://doi.org/10.20783/DIAS.664) is a dataset page on the DIAS (Data Integration and Analysis System) data repository. DIAS is a Japanese data repository for earth science and environmental datasets and offers the dataset DOI (Digital Object Identifier) 10.20783/DIAS.664 as a persistent identifier. 
+
 ## Website
 
 [Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/) is one of Japan's most popular and largest typhoon information websites. The annual page view is around 20 million, and many people visit the website to check the latest information and study historical data. 
-
-## Data Repository
-
-[Digital Typhoon](https://doi.org/10.20783/DIAS.664) is a dataset page on the DIAS (Data Integration and Analysis System) data repository. DIAS is a Japanese data repository for earth science and environmental datasets and offers the dataset DOI (Digital Object Identifier) 10.20783/DIAS.664 as a persistent identifier. 
