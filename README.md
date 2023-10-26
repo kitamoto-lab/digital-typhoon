@@ -16,7 +16,7 @@ Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tar
 @InProceedings{ neurips23,
       author = {Asanobu Kitamoto and Jared Hwang and Bastien Vuillod and Lucas Gautier and Yingtao Tian and Tarin Clanuwat},
       title = {Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones},
-      booktitle = {NeurIPS 2023 Datasets and Benchmarks (Spotlight)},
+      booktitle = {{NeurIPS} 2023 Datasets and Benchmarks (Spotlight)},
       year = 2023,
       month = 12,
 }
