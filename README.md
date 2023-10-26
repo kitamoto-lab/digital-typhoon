@@ -1,8 +1,10 @@
 # Digital Typhoon Dataset
 
+[Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/)
+
 ## Overview
 
-This page summarizes the official release of the Digital Typhoon dataset, the longest typhoon satellite image dataset for 40+ years, aimed at benchmarking machine learning models for long-term spatio-temporal data. To build the dataset, we developed a workflow to create a typhoon-centered image by cropping the original satellite image using Lambert azimuthal equal-area projection centered at the location of the best track data. We also address data quality issues such as inter-satellite calibration to create a long-term homogeneous dataset. To take advantage of the dataset, we proposed machine learning tasks by the types and targets of inference, with other tasks for meteorological analysis, societal impact, and climate change.
+This page summarizes information about the official release of the Digital Typhoon Dataset, the longest typhoon satellite image dataset for 40+ years, aimed at benchmarking machine learning models for long-term spatio-temporal data. To build the dataset, we developed a workflow to create a typhoon-centered image by cropping the original satellite image using Lambert azimuthal equal-area projection centered at the location of the best track data. We also address data quality issues such as inter-satellite calibration to create a long-term homogeneous dataset. To take advantage of the dataset, we proposed machine learning tasks by the types and targets of inference, with other tasks for meteorological analysis, societal impact, and climate change.
 
 ## Paper
 
