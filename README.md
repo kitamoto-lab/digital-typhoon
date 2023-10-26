@@ -4,6 +4,22 @@
 
 This page summarizes the official release of the Digital Typhoon dataset, the longest typhoon satellite image dataset for 40+ years, aimed at benchmarking machine learning models for long-term spatio-temporal data. To build the dataset, we developed a workflow to create a typhoon-centered image by cropping the original satellite image using Lambert azimuthal equal-area projection centered at the location of the best track data. We also address data quality issues such as inter-satellite calibration to create a long-term homogeneous dataset. To take advantage of the dataset, we proposed machine learning tasks by the types and targets of inference, with other tasks for meteorological analysis, societal impact, and climate change.
 
+## Paper
+
+The following papers describe the dataset. 
+
+Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", NeurIPS 2023 Datasets and Benchmarks (Spotlight), 2023.
+
+```
+@InProceedings{ neurips23,
+      author = {Asanobu Kitamoto and Jared Hwang and Bastien Vuillod and Lucas Gautier and Yingtao Tian and Tarin Clanuwat},
+      title = {Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones},
+      booktitle = {NeurIPS 2023 Datasets and Benchmarks (Spotlight)},
+      year = 2023,
+      month = 12,
+}
+```
+
 ## Dataset
 
 [Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. The dataset comprises 1,099 typhoons and 189,364 infrared images from the western North Pacific basin.
