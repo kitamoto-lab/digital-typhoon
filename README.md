@@ -39,7 +39,7 @@ doi: [10.20783/DIAS.664](https://doi.org/10.20783/DIAS.664)
 
 ## Model
 
-[Hugging Face](https://huggingface.co/kitamoto-lab) provides model weights for machine learning tasks.
+[Hugging Face](https://huggingface.co/kitamoto-lab) provides model weights for machine learning tasks and some codes for using them. 
 
 ## Data Repository
 
