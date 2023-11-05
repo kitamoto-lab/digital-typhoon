@@ -30,8 +30,10 @@ Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tar
 
 The dataset is provided under a CC BY 4.0 international license, with attribution as follows.
 
+```
 Digital Typhoon Dataset (National Institute of Informatics) 
 doi: [10.20783/DIAS.664](https://doi.org/10.20783/DIAS.664)
+```
 
 ## Software
 
