@@ -32,7 +32,7 @@ The dataset is provided under a CC BY 4.0 international license, with attributio
 
 ```
 Digital Typhoon Dataset (National Institute of Informatics) 
-doi: [10.20783/DIAS.664](https://doi.org/10.20783/DIAS.664)
+doi: 10.20783/DIAS.664
 ```
 
 ## Software
@@ -45,7 +45,7 @@ doi: [10.20783/DIAS.664](https://doi.org/10.20783/DIAS.664)
 
 ## Data Repository
 
-[Digital Typhoon Dataset](https://doi.org/10.20783/DIAS.664) is a dataset page on the DIAS (Data Integration and Analysis System) data repository. DIAS is a Japanese data repository for earth science and environmental datasets and offers the [dataset DOI (Digital Object Identifier)](https://dias.ex.nii.ac.jp/doi/) 10.20783/DIAS.664 as a persistent identifier. 
+[Digital Typhoon Dataset](https://doi.org/10.20783/DIAS.664) is also available from the DIAS (Data Integration and Analysis System) data repository. DIAS is a Japanese data repository for earth science and environmental datasets and offers the [dataset DOI (Digital Object Identifier)](https://dias.ex.nii.ac.jp/doi/) 10.20783/DIAS.664 as a persistent identifier. 
 
 ## Website
 
