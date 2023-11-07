@@ -12,7 +12,7 @@ This page summarizes information about the Digital Typhoon Dataset, the longest 
 
 The following papers describe the dataset. 
 
-Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", NeurIPS 2023 Datasets and Benchmarks (Spotlight), 2023.
+[Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", NeurIPS 2023 Datasets and Benchmarks (Spotlight), 2023.](https://neurips.cc/virtual/2023/poster/73675)
 
 ```
 @InProceedings{ neurips23,
@@ -23,6 +23,7 @@ Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tar
       month = 12,
 }
 ```
+You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", arXiv.2311.02665, 2023.](https://arxiv.org/abs/2311.02665)
 
 ## Dataset
 
