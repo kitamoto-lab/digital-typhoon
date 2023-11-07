@@ -23,7 +23,7 @@ The following papers describe the dataset.
       month = 12,
 }
 ```
-You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", arXiv.2311.02665, 2023.](https://arxiv.org/abs/2311.02665)
+You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", arXiv:2311.02665, 2023.](https://arxiv.org/abs/2311.02665)
 
 ## Dataset
 
