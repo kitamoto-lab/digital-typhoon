@@ -2,7 +2,7 @@
 
 This dataset is created by the [Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/) project. 
 
-![Overview of the Digital Typhoon dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/overview.png)
+![Overview of the Digital Typhoon dataset](overview.png)
 
 ## Overview
 
