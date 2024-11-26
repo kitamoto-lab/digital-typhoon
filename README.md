@@ -39,7 +39,7 @@ You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vui
 The dataset is provided under a CC BY 4.0 international license, with attribution as follows.
 
 ```
-Digital Typhoon Dataset (National Institute of Informatics), doi:10.20783/DIAS.664
+Digital Typhoon Dataset V2 (National Institute of Informatics), doi:10.20783/DIAS.664
 ```
 
 ## Software
