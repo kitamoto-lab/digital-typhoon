@@ -10,7 +10,7 @@ This page summarizes information about the Digital Typhoon Dataset, the longest 
 
 ## Paper
 
-The following paper describe the dataset. 
+The following paper describes the dataset. 
 
 [Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", NeurIPS 2023 Datasets and Benchmarks (Spotlight), 2023.](https://neurips.cc/virtual/2023/poster/73675)
 
@@ -27,17 +27,26 @@ You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vui
 
 ## Dataset
 
-[Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. The dataset comprises 1,099 typhoons and 189,364 infrared images from the western North Pacific basin.
+[Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. The Dataset V2, released on November 26, 2024, comprises the WP dataset from the northern hemisphere, and the AU dataset from the southern hemisphere. 
+
+| Basin | Western Pacific (WP) | Around Australia (AU) | 
+|--|--|--|
+| Season | 1978-2023 (1978, 1979, 1980 are not complete) | 1979-2024 (some years are not complete) |
+| Tropical cyclones | 1,116 | 480 |
+| Images | 192,956 | 70,087 |
+| Dataset Size | 56GB | 21GB | 
+
+[image](https://github.com/user-attachments/assets/61f8d9b0-7706-4162-9b9a-aac14fe836f9)
 
 The dataset is provided under a CC BY 4.0 international license, with attribution as follows.
 
 ```
-Digital Typhoon Dataset (National Institute of Informatics) , doi:10.20783/DIAS.664
+Digital Typhoon Dataset (National Institute of Informatics), doi:10.20783/DIAS.664
 ```
 
 ## Software
 
-[pyphoon2](https://github.com/kitamoto-lab/pyphoon2) is a machine-learning library for the Digital Typhoon Dataset. The documentation of the library is available at [pyphoon2’s documentation at readthedocs](https://pyphoon2.readthedocs.io/en/latest/).
+[pyphoon2](https://github.com/kitamoto-lab/pyphoon2) is a machine-learning library for the Digital Typhoon Dataset. The documentation is available at [pyphoon2’s documentation at readthedocs](https://pyphoon2.readthedocs.io/en/latest/).
 
 ## Model
 
