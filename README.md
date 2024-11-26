@@ -36,8 +36,6 @@ You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vui
 | Images | 192,956 | 70,087 |
 | Dataset Size | 56GB | 21GB | 
 
-[image](https://github.com/user-attachments/assets/61f8d9b0-7706-4162-9b9a-aac14fe836f9)
-
 The dataset is provided under a CC BY 4.0 international license, with attribution as follows.
 
 ```
