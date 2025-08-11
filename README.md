@@ -14,6 +14,16 @@ The following paper introduces the Dataset V2.
 
 [Asanobu KITAMOTO, Erwan Dzik, Gaspar Faure, "Machine Learning for the Digital Typhoon Dataset: Extensions to Multiple Basins and New Developments in Representations and Tasks", arXiv, doi:arXiv.2411.16421, 2024.](https://arxiv.org/abs/2411.16421)
 
+```
+@Article{ arxiv24,
+      author = {Asanobu KITAMOTO and Erwan Dzik and Gaspar Faure},
+      title = {Machine Learning for the Digital Typhoon Dataset: Extensions to Multiple Basins and New Developments in Representations and Tasks},
+      journal = {arXiv},
+      year = 2024,
+      month = 11,
+      }
+```
+
 The following paper introduces the Dataset V1.
 
 [Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", NeurIPS 2023 Datasets and Benchmarks (Spotlight), 2023.](https://neurips.cc/virtual/2023/poster/73675)
