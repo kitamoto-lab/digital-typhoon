@@ -21,7 +21,7 @@ The following paper introduces the Dataset V2.
       journal = {arXiv},
       year = 2024,
       month = 11,
-      }
+}
 ```
 
 The following paper introduces the Dataset V1.
