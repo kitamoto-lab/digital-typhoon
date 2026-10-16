@@ -1,3 +1,5 @@
+<img width="1226" height="562" alt="overview-v3" src="https://github.com/user-attachments/assets/2bf992ca-a033-4197-922e-87bc3b8e98c1" />
+
 # Digital Typhoon Dataset
 
 This dataset is created by the [Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/) project. 
@@ -6,11 +8,26 @@ This dataset is created by the [Digital Typhoon](http://agora.ex.nii.ac.jp/digit
 
 ## Overview
 
-This page summarizes information about the Digital Typhoon Dataset, the longest typhoon satellite image dataset for 40+ years, aimed at benchmarking machine learning models for long-term spatio-temporal data. To build the dataset, we developed a workflow to create a typhoon-centered image by cropping the original satellite image using Lambert azimuthal equal-area projection centered at the location of the best track data. We also address data quality issues such as inter-satellite calibration to create a long-term homogeneous dataset. To take advantage of the dataset, we proposed machine learning tasks by the types and targets of inference, with other tasks for meteorological analysis, societal impact, and climate change.
+This page summarizes the Digital Typhoon Dataset, the longest typhoon satellite image dataset spanning nearly 50 years, designed to benchmark machine learning models for long-term spatio-temporal data. To build the dataset, we developed a workflow to create typhoon-centered images by cropping the original satellite image using azimuthal equidistant projection centered on the best-track location. We also addressed data quality issues, such as inter-satellite calibration, to create a long-term, homogeneous dataset. To leverage the dataset, we propose machine learning tasks by inference type and target, including meteorological analysis, societal impact, and climate change.
 
 ## Paper
 
-The following paper introduces the Dataset V2.
+### Dataset V3
+
+[Asanobu Kitamoto, Victor Le Louarn, Noelia Falczuk, Ngoc Anh Tong, Anja Veleva, "Digital Typhoon Dataset V3: Benchmarking for Multi-spectral Extension and Analyzing Systematic Bias in Intensity Regression", arXiv, doi:arXiv.2610.21654, 2026.](https://arxiv.org/abs/2610.21654)
+
+```
+@Article{ arxiv26,
+      author = {Asanobu Kitamoto, Victor Le Louarn, Noelia Falczuk, Ngoc Anh Tong, Anja Veleva},
+      title = {Digital Typhoon Dataset V3: Benchmarking for Multi-spectral Extension and Analyzing Systematic Bias in Intensity Regression},
+      journal = {arXiv},
+      year = 2026,
+      month = 10,
+      doi = {https://doi.org/10.48550/arXiv.2610.21654},
+}
+```
+
+### Dataset V2
 
 [Asanobu KITAMOTO, Erwan Dzik, Gaspar Faure, "Machine Learning for the Digital Typhoon Dataset: Extensions to Multiple Basins and New Developments in Representations and Tasks", arXiv, doi:arXiv.2411.16421, 2024.](https://arxiv.org/abs/2411.16421)
 
@@ -25,7 +42,7 @@ The following paper introduces the Dataset V2.
 }
 ```
 
-The following paper introduces the Dataset V1.
+### Dataset V1
 
 [Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", NeurIPS 2023 Datasets and Benchmarks (Spotlight), 2023.](https://neurips.cc/virtual/2023/poster/73675)
 
@@ -42,28 +59,21 @@ You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vui
 
 ## Dataset
 
-[Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. The Dataset V2, released on November 26, 2024, comprises the WP dataset from the northern hemisphere, and the AU dataset from the southern hemisphere. 
-
-| Basin | Western Pacific (WP) | Around Australia (AU) | 
-|--|--|--|
-| Season | 1978-2023 (1978, 1979, 1980 are not complete) | 1979-2024 (some years are not complete) |
-| Tropical cyclones | 1,116 | 480 |
-| Images | 192,956 | 70,087 |
-| Dataset Size | 56GB | 21GB | 
+[Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. Dataset V3, released on October 16, 2026, includes the WP dataset for the Northern Hemisphere and the AU dataset for the Southern Hemisphere. 
 
 The dataset is provided under a CC BY 4.0 international license, with attribution as follows.
 
 ```
-Digital Typhoon Dataset V2 (National Institute of Informatics), doi:10.20783/DIAS.664
+Digital Typhoon Dataset V3 (National Institute of Informatics), doi:10.20783/DIAS.664
 ```
 
 ## Software
 
-[pyphoon2](https://github.com/kitamoto-lab/pyphoon2) is a machine-learning library for the Digital Typhoon Dataset. The documentation is available at [pyphoon2’s documentation at readthedocs](https://pyphoon2.readthedocs.io/en/latest/).
+[pyphoon3](https://github.com/kitamoto-lab/pyphoon3) is a machine-learning library for the Digital Typhoon Dataset. 
 
 ## Model
 
-[Hugging Face](https://huggingface.co/kitamoto-lab) provides model weights for machine learning tasks and some codes for using them. 
+[Hugging Face](https://huggingface.co/kitamoto-lab) provides model weights for machine learning tasks and some code for Dataset V1 (obsolete version).
 
 ## Data Repository
 
@@ -71,4 +81,4 @@ Digital Typhoon Dataset V2 (National Institute of Informatics), doi:10.20783/DIA
 
 ## Website
 
-[Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/) is one of Japan's most popular and largest typhoon information websites. The annual page view is around 20 million, and many people visit the website to check the latest information and study historical data. 
+[Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/) is one of Japan's most popular and largest typhoon information websites. The site gets around 20 million page views annually, and many people visit it to check the latest information and study historical data. 
