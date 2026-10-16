@@ -8,7 +8,19 @@ The [Digital Typhoon](http://agora.ex.nii.ac.jp/digital-typhoon/) project create
 
 This page summarizes the Digital Typhoon Dataset, the longest typhoon satellite image dataset spanning nearly 50 years, designed to benchmark machine learning models for long-term spatio-temporal data. To build the dataset, we developed a workflow to create typhoon-centered images by cropping the original satellite image using azimuthal equidistant projection centered on the best-track location. We also addressed data quality issues, such as inter-satellite calibration, to create a long-term, homogeneous dataset. To leverage the dataset, we propose machine learning tasks by inference type and target, including meteorological analysis, societal impact, and climate change.
 
+## Dataset
+
+[Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. Dataset V3, released on October 16, 2026, includes the WP dataset for the Northern Hemisphere and the AU dataset for the Southern Hemisphere. 
+
+The dataset is provided under a CC BY 4.0 international license, with attribution as follows.
+
+```
+Digital Typhoon Dataset V3 (National Institute of Informatics), doi:10.20783/DIAS.664
+```
+
 ## Paper
+
+Please refer to the following papers for details on the dataset. 
 
 ### Dataset V3
 
@@ -54,16 +66,6 @@ This page summarizes the Digital Typhoon Dataset, the longest typhoon satellite 
 }
 ```
 You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat, "Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones", arXiv:2311.02665, 2023.](https://arxiv.org/abs/2311.02665)
-
-## Dataset
-
-[Digital Typhoon Dataset](http://agora.ex.nii.ac.jp/digital-typhoon/dataset/) is a satellite image dataset designed for machine learning research on tropical cyclones. Dataset V3, released on October 16, 2026, includes the WP dataset for the Northern Hemisphere and the AU dataset for the Southern Hemisphere. 
-
-The dataset is provided under a CC BY 4.0 international license, with attribution as follows.
-
-```
-Digital Typhoon Dataset V3 (National Institute of Informatics), doi:10.20783/DIAS.664
-```
 
 ## Software
 
