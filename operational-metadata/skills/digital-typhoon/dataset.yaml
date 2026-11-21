@@ -1,0 +1,170 @@
+# Operational metadata: Digital Typhoon Dataset V3 (dataset)
+# Describes release V3-2025.R2. Companion file: library.yaml (pyphoon3).
+# Sources: the V3 dataset page, the V3 paper (arXiv:2610.21654), and inspection of the released data.
+# Generated: 2026-11-20
+# License: CC BY 4.0
+
+schema_version: "0.1.0"
+
+dataset:
+  name: "Digital Typhoon Dataset V3"
+  version: "V3-2025.R2"
+  doi: "10.20783/DIAS.664"
+  license: "CC BY 4.0"
+  url: "https://agora.ex.nii.ac.jp/digital-typhoon/dataset/V3/"
+  repository_url: "https://search.diasjp.net/en/dataset/DigitalTyphoon"  # DOI landing page (DIAS)
+  release_date: "2026-10-16"
+
+  creators:
+    - name: "Kitamoto, Asanobu"
+      affiliation: "National Institute of Informatics"
+
+  description: |
+    Version 3 of the Digital Typhoon Dataset: typhoon-centered satellite images (brightness temperature)
+    from geostationary satellites (Himawari series and GOES-9), paired hourly with best-track data.
+    V3 covers two basins (WP: Western North Pacific, AU: Australian region) and four satellite channels.
+    Each tropical cyclone (sequence) has a directory of images and a track CSV file.
+
+  citation: "Digital Typhoon Dataset V3 (National Institute of Informatics), doi:10.20783/DIAS.664"
+  papers:
+    - "Asanobu Kitamoto, Victor Le Louarn, Noelia Falczuk, Ngoc Anh Tong, Anja Veleva. Digital Typhoon Dataset V3: Benchmarking for Multi-spectral Extension and Analyzing Systematic Bias in Intensity Regression. arXiv:2610.21654, 2026. (V3)"
+    - "Asanobu Kitamoto, Erwan Dzik, Gaspar Faure. Machine Learning for the Digital Typhoon Dataset: Extensions to Multiple Basins and New Developments in Representations and Tasks. arXiv:2411.16421, 2024. (V2)"
+    - "Asanobu Kitamoto, Jared Hwang, Bastien Vuillod, Lucas Gautier, Yingtao Tian, Tarin Clanuwat. Digital Typhoon: Long-term Satellite Image Dataset for the Spatio-Temporal Modeling of Tropical Cyclones. NeurIPS 2023 Datasets and Benchmarks. arXiv:2311.02665. (V1)"
+
+  releases:
+    - name: "V3-2025.R2"
+      status: "current (public)"
+      note: "Corrects 4,102 images of R1: 4,056 blank images in channels 1-3 were regenerated and 46 mostly missing images in AU channels 1 and 2 were removed"
+    - name: "V3-2025.R1"
+      status: "not public (available on request)"
+      note: "Release used for the benchmarks of the V3 paper"
+  update_policy: "New seasons are added after each typhoon season ends (the following spring). Past seasons may also be corrected, so replace an old release with the new one."
+
+  temporal_coverage:
+    start: "1978-11-25"   # first track time (WP 197830, channel 1)
+    end: "2025-12-03"     # last track time (WP 202527, 12 UTC); covers seasons up to 2025
+    resolution: "1 hour"  # track rows are hourly (including interpolated rows); images around 1978 are 3-hourly
+
+  spatial_coverage:
+    description: "WP: Western North Pacific (Northern Hemisphere, JMA area of responsibility); AU: Australian region (Southern Hemisphere)"
+    basins:
+      - code: "WP"
+        name: "Western North Pacific"
+        best_track_source: "Japan Meteorological Agency (JMA) best track (the latest season uses preliminary data via NOAA)"
+        latitude_range: [1.4, 69.0]      # observed in channel 1
+        longitude_range: [97.5, 188.0]   # degrees east, 0-360
+      - code: "AU"
+        name: "Australian region"
+        best_track_source: "Bureau of Meteorology, Australia"
+        latitude_range: [-48.5, -2.7]
+        longitude_range: [38.09, 212.1]  # degrees east, 0-360
+
+  channels:
+    # Wavelength bands in micrometres; center wavelength in parentheses.
+    # Channels that overlap in wavelength get the same number across satellites. Visible channels are not included.
+    - id: 1
+      type: "Infrared 1"
+      first_season: 1978
+      note: "The channel of datasets V1 and V2; longest coverage"
+      wavelength_um:
+        Himawari-1/2/3/4: "10.5-12.5"
+        Himawari-5: "10.5-11.5 (11.0)"
+        GOES-9: "10.2-11.2 (10.7)"
+        Himawari-6/7: "10.3-11.3 (10.8)"
+        Himawari-8/9: "11.2±0.2"
+    - id: 2
+      type: "Infrared 2"
+      first_season: 1995
+      note: "Introduced with Himawari-5"
+      wavelength_um:
+        Himawari-5: "11.5-12.5 (12.0)"
+        GOES-9: "11.5-12.4 (11.95)"
+        Himawari-6/7: "11.5-12.5 (12.0)"
+        Himawari-8/9: "12.35±0.3"
+    - id: 3
+      type: "Water vapor"
+      first_season: 1995
+      note: "Introduced with Himawari-5"
+      wavelength_um:
+        Himawari-5: "6.5-7.0 (6.75)"
+        GOES-9: "6.5-7.0 (6.75)"
+        Himawari-6/7: "6.5-7.0 (6.75)"
+        Himawari-8/9: "6.25±0.37"
+    - id: 4
+      type: "Near infrared"
+      first_season: 2005
+      note: "Introduced with Himawari-6. Excluded from the multi-channel experiments of the V3 paper because of its distinct spectral and diurnal characteristics"
+      wavelength_um:
+        Himawari-6/7: "3.5-4.0 (3.75)"
+        Himawari-8/9: "3.85±0.22"
+
+  satellites:  # satellite code in image file names -> satellite
+    GMS1: "Himawari-1 (GMS)"
+    GMS2: "Himawari-2 (GMS-2)"
+    GMS3: "Himawari-3 (GMS-3)"
+    GMS4: "Himawari-4 (GMS-4)"
+    GMS5: "Himawari-5 (GMS-5)"
+    GOE9: "GOES-9"
+    MTS1: "Himawari-6 (MTSAT-1R)"
+    MTS2: "Himawari-7 (MTSAT-2)"
+    HMW8: "Himawari-8"
+    HMW9: "Himawari-9"
+
+  image:
+    size: [512, 512]
+    content: "Typhoon-centered brightness temperature image (K)"
+    projection: "Azimuthal equidistant, centered on the best-track position"
+    missing_area_rule: "Images with more than 30% of the area missing are excluded. V3-2025.R2 still contains some images over this limit (see caveats)."
+
+  statistics:  # counts from the V3 dataset page (cyclones / images); track CSV rows also include rows without images
+    total_typhoons: 1680
+    total_images: 818881
+    per_channel:
+      - {channel: 1, basin: WP, typhoons: 1169, images: 202986, track_rows: 236237, seasons: "1978-2025"}
+      - {channel: 1, basin: AU, typhoons: 511,  images: 76188,  track_rows: 91381,  seasons: "1979-2025"}
+      - {channel: 2, basin: WP, typhoons: 744,  images: 142583, track_rows: 146163, seasons: "1995-2025"}
+      - {channel: 2, basin: AU, typhoons: 339,  images: 58842,  track_rows: 60624,  seasons: "1995-2025"}
+      - {channel: 3, basin: WP, typhoons: 744,  images: 142591, track_rows: 146163, seasons: "1995-2025"}
+      - {channel: 3, basin: AU, typhoons: 339,  images: 58842,  track_rows: 60624,  seasons: "1995-2025"}
+      - {channel: 4, basin: WP, typhoons: 502,  images: 96611,  track_rows: 97087,  seasons: "2005-2025"}
+      - {channel: 4, basin: AU, typhoons: 223,  images: 40238,  track_rows: 40508,  seasons: "2005-2025"}
+
+  distribution:
+    base_url: "https://agora.ex.nii.ac.jp/digital-typhoon/dataset/archive/standard/V3-2025.R2/"
+    total_size: "231.3 GB"
+    files:  # one zip per basin and channel; SHA256 as published on the dataset page
+      - {name: "V3-2025.R2-WP-1.zip", basin: WP, channel: 1, size: "59.0 GB", sha256: "c439934cf66d5d1e856eca20c881a270538b210d1158c435757256ceafbc9687"}
+      - {name: "V3-2025.R2-WP-2.zip", basin: WP, channel: 2, size: "44.4 GB", sha256: "82acfde04844e7a279f425eb0eed7e1556b8cbacf90e538c171423c3cc034a25"}
+      - {name: "V3-2025.R2-WP-3.zip", basin: WP, channel: 3, size: "26.3 GB", sha256: "1ee921c651b018b63f590c0f37767f42e6ac79d79ca116e3fb8119b08e46da3b"}
+      - {name: "V3-2025.R2-WP-4.zip", basin: WP, channel: 4, size: "35.2 GB", sha256: "49c2af72b9628567f4c053f734bac2bf3d351bb451fbda9241c4309b06e283a4"}
+      - {name: "V3-2025.R2-AU-1.zip", basin: AU, channel: 1, size: "22.7 GB", sha256: "d25e89295ea14efae206d74ab7d8b4045df0ed16ecb41633fc3ba459ca37246e"}
+      - {name: "V3-2025.R2-AU-2.zip", basin: AU, channel: 2, size: "18.3 GB", sha256: "5fabf437a583251f31f3d1cd9ca2efe91ec488aa835c17202bcdf1f913dd733b"}
+      - {name: "V3-2025.R2-AU-3.zip", basin: AU, channel: 3, size: "10.7 GB", sha256: "740774b07bf711dfc2aeedf666607884d7c74293b30ea2fb8e9c917c9510c9e1"}
+      - {name: "V3-2025.R2-AU-4.zip", basin: AU, channel: 4, size: "14.7 GB", sha256: "58787e54961050a18ba275427aba519a062954835d4c4a5029c2b5d9971a75be"}
+      - {name: "substituted_conversion.csv", note: "List of the 1,477 images converted with substituted calibration coefficients or conversion tables"}
+    sample:
+      name: "pyphoon3-sample-V3-2025.zip"
+      url: "https://github.com/kitamoto-lab/pyphoon3/releases/download/sample-V3-2025/pyphoon3-sample-V3-2025.zip"
+      size: "37 MB"
+      sha256: "0bc56ad07336e65d35c83b50043a41a495f7fa66a8d524fa5eb5f2f22468e8e4"
+      content: "Channel 1 only; 4 cyclones per basin (2 in the 2022-2023 seasons, 1 each in 2024 and 2025), thinned to 6-hourly observations; same directory layout as the full dataset"
+
+caveats:
+  - item: "Images over the 30% missing-area limit in V3-2025.R2 (known issue)"
+    detail: |
+      174 Himawari-5 (GMS-5) images have mask_N_pct > 0.3. They are listed in known_issues/mask_over_30pct_V3-2025.R2.csv
+      and will be corrected in a future release.
+      (1) Southern part not scanned: 168 images (AU, channel 1: 48, channel 2: 56, channel 3: 64; 11 sequences, 2001-12 to 2003-04, 13-17°S).
+          The bottom of the image is filled with 130.0 K, with a band of corrupted scan lines above it. All were taken at hours that are not
+          multiples of three (01, 02, 04, 07, 08, 10, 13, 14, 19, 20, 22 UTC). mask_N counts only the filled pixels, not the corrupted lines,
+          so the unusable area is larger than mask_N_pct.
+      (2) Edge of the Earth's disk: 6 images (WP 199605, 1996-07-16 14-15 UTC, 54°N 175°E; AU 200013, 2000-03-29 09 UTC, 72°E; channels 1 and 2).
+          The masked area is space beyond the edge of the disk, not missing data, but it is counted in mask_N.
+      To exclude them, pass the file names in the list to pyphoon3's ignore_list (for multi-channel loading, the names without the channel suffix).
+    severity: "warning"
+  - item: "Seasonal updates can change past data"
+    detail: "Past seasons may be corrected when a new season is added. Record the release name (e.g. V3-2025.R2) to make experiments reproducible."
+    severity: "warning"
+  - item: "The V3 paper's benchmarks were computed on V3-2025.R1"
+    detail: "The public release is R2. According to Appendix A of the paper, the image counts differ only by 23 AU images in channels 1 and 2, and the median evaluation RMSE over epochs 41-50 changes little (e.g. WP-1: 6.63 -> 6.54 hPa); the paper concludes that its results remain representative for R2. Exact reproduction requires R1, available on request."
+    severity: "info"
