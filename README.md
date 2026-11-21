@@ -71,6 +71,10 @@ You can also find the paper on arXiv [Asanobu Kitamoto, Jared Hwang, Bastien Vui
 
 [pyphoon3](https://github.com/kitamoto-lab/pyphoon3) is a machine-learning library for the Digital Typhoon Dataset. 
 
+## Operational Metadata
+
+[Operational metadata](operational-metadata/) describes how to use the dataset and pyphoon3 in machine-readable form: file layout, column units and codes, missing values, known issues and tested code examples. It includes a Claude Code skill, so that people and AI coding assistants can write correct code for the dataset. It is licensed under CC BY 4.0.
+
 ## Model
 
 [Hugging Face](https://huggingface.co/kitamoto-lab) provides model weights for machine learning tasks and some code for Dataset V1 (obsolete version).

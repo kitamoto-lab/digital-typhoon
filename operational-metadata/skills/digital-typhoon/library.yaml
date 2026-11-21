@@ -1,0 +1,613 @@
+# Operational metadata: Digital Typhoon Dataset V3 (library: pyphoon3)
+# Describes pyphoon3 3.0.0 (commit 2c01a33, 2026-10-16) reading dataset release V3-2025.R2.
+# Companion file: dataset.yaml. Sources: pyphoon3 source code and README, the V3 paper (arXiv:2610.21654),
+# and inspection of the released data.
+# Generated: 2026-11-20
+# License: CC BY 4.0
+
+schema_version: "0.1.0"
+
+library:
+  name: "pyphoon3"
+  version: "3.0.0"
+  repository: "https://github.com/kitamoto-lab/pyphoon3"
+  documentation: "https://github.com/kitamoto-lab/pyphoon3#readme"
+  license: "MIT License"
+  supported_datasets: ["V3-2025.R1", "V3-2025.R2"]
+  versioning_policy: "Releases 3.0.x only contain fixes that leave the V3 paper's benchmark results unchanged; changes that may affect results go into a new minor version."
+
+  installation: |
+    git clone https://github.com/kitamoto-lab/pyphoon3
+    cd pyphoon3
+    uv pip install .   # pyphoon3 is not on PyPI
+
+  dependencies:
+    - "torch"
+    - "torchvision"
+    - "numpy"
+    - "pandas"
+    - "h5py"
+    - "psutil"   # new in pyphoon3 (memory check for multi-channel loading)
+
+  main_classes:
+    - name: "DigitalTyphoonDataset"
+      purpose: "PyTorch Dataset. Loads one channel and one basin, or several channels (image_dirs etc. as lists), and splits by image, sequence or season."
+    - name: "DigitalTyphoonSequence"
+      purpose: "The images and track data of one tropical cyclone (sequence ID)."
+    - name: "DigitalTyphoonImage"
+      purpose: "One observation time: the image ((512, 512) for one channel, (C, 512, 512) for several) and its track row."
+
+  constructor:  # arguments of DigitalTyphoonDataset.__init__
+    image_dir: "str: {root}/{channel}/{basin}/image/ (pass '' when loading several channels)"
+    metadata_dir: "str: {root}/{channel}/{basin}/metadata/"
+    metadata_json: "str: {root}/{channel}/{basin}/metadata.json"
+    labels: "str or tuple of str: the label(s) to return (see label_mapping)"
+    split_dataset_by: "'image' (default) | 'sequence' | 'season'"
+    spectrum: "'Data' (default). Has no practical effect: the first dataset in the h5 file is read."
+    get_images_by_sequence: "bool: if True, __getitem__ returns a whole sequence"
+    load_data_into_memory: "False | 'track' | 'images' | 'all_data'"
+    ignore_list: "list of str: image file names (not paths) to skip. For several channels, names without the channel suffix: '<YYYYMMDDHH>-<sequence ID>-<satellite>'"
+    filter_func: "DigitalTyphoonImage -> bool: images for which it returns True are kept"
+    transform_func: "np.ndarray -> np.ndarray: applied to each image after loading"
+    transform: "function applied to the (image, label) tuple"
+    verbose: "bool"
+    image_dirs: "list of str: for several channels"
+    metadata_dirs: "list of str: for several channels"
+    metadata_jsons: "list of str: for several channels"
+    exclude_flagged: "bool (default False): skip blank or mostly missing images (relevant to R1; R2 has none)"
+
+  label_mapping:  # label names accepted by `labels` -> column index in the track CSV. Some differ from the CSV header names.
+    year: 0
+    month: 1
+    day: 2
+    hour: 3
+    grade: 4
+    lat: 5
+    lng: 6
+    pressure: 7
+    wind: 8
+    dir50: 9
+    long50: 10
+    short50: 11
+    dir30: 12
+    long30: 13
+    short30: 14
+    landfall: 15
+    interpolated: 16    # CSV header 'intp': position (lat/lng) interpolation flag
+    filename: 17        # CSV header 'file_{channel}'
+    mask_1: 18          # CSV header 'mask_{channel}'
+    mask_1_percent: 19  # CSV header 'mask_{channel}_pct'
+
+  usage_examples:
+    initialization: |
+      from pyphoon3.DigitalTyphoonDataset import DigitalTyphoonDataset
+
+      root = "/path/to/V3-2025.R2"   # or the sample: "pyphoon3-sample-V3-2025"
+      dataset = DigitalTyphoonDataset(
+          f"{root}/1/WP/image/",
+          f"{root}/1/WP/metadata/",
+          f"{root}/1/WP/metadata.json",
+          'pressure',                  # label to return
+          split_dataset_by='sequence',
+          load_data_into_memory=False,
+          ignore_list=[],
+          verbose=False,
+      )
+
+    multi_channel: |
+      # Only observation times where all channels exist are kept; images have shape (number of channels, 512, 512)
+      channels = [1, 2, 3]
+      dataset = DigitalTyphoonDataset(
+          "", "", "", 'pressure',
+          image_dirs=[f"{root}/{c}/WP/image/" for c in channels],
+          metadata_dirs=[f"{root}/{c}/WP/metadata/" for c in channels],
+          metadata_jsons=[f"{root}/{c}/WP/metadata.json" for c in channels],
+      )
+
+    get_item: |
+      image_array, label = dataset[i]          # image: np.float32, (512, 512), K
+      image_obj = dataset.get_image_from_idx(i)
+      image_obj.image()      # image pixels as a numpy array
+      image_obj.datetime()   # observation time (UTC)
+      image_obj.grade()
+      image_obj.pressure()
+
+    season_split_benchmark: |
+      # SS-L2 split of the V3 benchmarks: the last two seasons for evaluation, earlier seasons for training
+      eval_set = dataset.images_from_seasons([2024, 2025])
+      train_set = dataset.images_from_seasons([s for s in dataset.get_seasons() if s < 2024])
+
+    random_split: |
+      from torch.utils.data import DataLoader
+      train, test, val = dataset.random_split([0.7, 0.15, 0.15], split_by='sequence')
+      trainloader = DataLoader(train, batch_size=16, shuffle=True)
+
+    exclude_mask_over_30pct: |
+      # Known issue in V3-2025.R2: skip the 174 images over the 30% missing-area limit
+      import pandas as pd
+      bad = pd.read_csv("known_issues/mask_over_30pct_V3-2025.R2.csv")   # shipped with this metadata
+      ignore = bad.loc[(bad.basin == "AU") & (bad.channel == 1), "filename"].tolist()
+      dataset = DigitalTyphoonDataset(f"{root}/1/AU/image/", f"{root}/1/AU/metadata/",
+                                      f"{root}/1/AU/metadata.json", 'pressure',
+                                      ignore_list=ignore)
+
+    exclude_substituted_conversion: |
+      # Skip images converted with substituted coefficients (accuracy of their brightness temperatures unknown)
+      import pandas as pd
+      sub = pd.read_csv(f"{root}/substituted_conversion.csv")
+      ignore = sub.loc[(sub.basin == "WP") & (sub.channel == 1), "filename"].tolist()
+      dataset = DigitalTyphoonDataset(f"{root}/1/WP/image/", f"{root}/1/WP/metadata/",
+                                      f"{root}/1/WP/metadata.json", 'pressure',
+                                      ignore_list=ignore)
+
+    filter_interpolated: |
+      # Skip images whose position (lat/lng) is interpolated. In AU, wind and pressure can be interpolated even where intp = 0.
+      dataset = DigitalTyphoonDataset(..., filter_func=lambda img: not img.interpolated())
+
+    benchmark_preprocessing: |
+      # Same preprocessing as pyphoon3's examples/train_regression.py: clip to [170, 300] K and scale to [0, 1]
+      import numpy as np
+      def standardize(img):
+          return (np.clip(img, 170.0, 300.0) - 170.0) / (300.0 - 170.0)
+      dataset = DigitalTyphoonDataset(..., transform_func=standardize)
+
+    train_regression_script: |
+      # pyphoon3's benchmark script (run from the pyphoon3 repository)
+      python examples/train_regression.py --data-root /path/to/V3-2025.R2 \
+          --basin WP --channels 1 --label pressure --model resnet18 --image-type full --seed 0
+
+file_structure:
+  description: "Organized by channel, then basin. Each {channel}/{basin} directory has an image directory, a track CSV directory and metadata.json."
+  components:
+    - name: "image_dir"
+      path_pattern: "{root}/{channel}/{basin}/image/{sequence_id}/*.h5"
+      description: "One directory of h5 images per sequence ID; channel in {1, 2, 3, 4}, basin in {WP, AU}"
+      required: true
+    - name: "metadata_dir"
+      path_pattern: "{root}/{channel}/{basin}/metadata/{sequence_id}.csv"
+      description: "One hourly track CSV per sequence"
+      required: true
+    - name: "metadata_json"
+      path_pattern: "{root}/{channel}/{basin}/metadata.json"
+      description: "List of sequences (name, dates, number of images)"
+      required: true
+    - name: "substituted_conversion"
+      path_pattern: "{root}/substituted_conversion.csv"
+      description: "Images converted with substituted calibration coefficients or conversion tables (all channels and basins)"
+      required: false
+
+files:
+  # --- Images (HDF5) ---
+  - name: "image_file"
+    format: "hdf5"
+
+    filename:
+      pattern: "{datetime}-{sequence_id}-{satellite}-{channel}.h5"
+      example: "2025112312-202527-HMW9-1.h5"
+      regex: "^(\\d{10})-(\\d{6})-([A-Z0-9]+)-([1-4])\\.h5$"
+      components:
+        - name: "datetime"
+          position: "1st segment"
+          format: "YYYYMMDDHH (UTC)"
+        - name: "sequence_id"
+          position: "2nd segment"
+          format: "YYYYNN (season year + number)"
+        - name: "satellite"
+          position: "3rd segment"
+          format: "GMS1-GMS5, GOE9, MTS1, MTS2, HMW8, HMW9 (see dataset.yaml: satellites)"
+        - name: "channel"
+          position: "4th segment"
+          format: "1-4"
+
+    hdf5_spec:
+      default_dataset: "Data"
+      datasets:
+        - key: "Data"
+          dtype: "float64"    # as stored; pyphoon3 returns float32
+          shape: [512, 512]
+          unit: "K"
+          description: "Brightness temperature (attributes long_name='Brightness temperature', units='K (kelvin)'); typhoon-centered, azimuthal equidistant projection"
+          range:  # example: 2025112312-202527-HMW9-{1..4}.h5
+            channel_1: [182.1, 298.9]
+            channel_2: [181.3, 295.9]
+            channel_3: [185.3, 248.6]
+            channel_4: [130.0, 300.3]
+      access_code: |
+        import h5py
+        import numpy as np
+        with h5py.File(filepath, 'r') as h5f:
+            image = np.array(h5f['Data'], dtype=np.float32)   # (512, 512), K
+
+  # --- Track CSV ---
+  - name: "track_file"
+    format: "csv"
+    encoding: "utf-8"
+
+    filename:
+      pattern: "{sequence_id}.csv"
+      example: "202527.csv"
+
+    csv_spec:
+      delimiter: ","
+      has_header: true
+      note: "One row per hour, including hours without an image (file_N, mask_N and mask_N_pct are then empty). pyphoon3 reads columns by position, not by name."
+      columns:
+        - index: 0
+          name: "year"
+          type: "integer"
+          description: "Year (UTC)"
+          unit: "year"
+          range: {min: 1978, max: 2025}
+          example: 2025
+
+        - index: 1
+          name: "month"
+          type: "integer"
+          description: "Month (UTC)"
+          unit: "month"
+          range: {min: 1, max: 12}
+
+        - index: 2
+          name: "day"
+          type: "integer"
+          description: "Day (UTC)"
+          unit: "day"
+          range: {min: 1, max: 31}
+
+        - index: 3
+          name: "hour"
+          type: "integer"
+          description: "Hour (UTC)"
+          unit: "hour"
+          range: {min: 0, max: 23}
+
+        - index: 4
+          name: "grade"
+          type: "integer"
+          description: "Intensity class (JMA best-track classes; AU uses the same wind thresholds)"
+          unit: null
+          values:
+            0: "AU only: tropical cyclone whose wind speed is missing in the original best track (13 sequences, 610 rows). wind is 0, or linearly interpolated in time from neighbouring rows (24 rows in 200703, 200711, 200822); grade stays 0"
+            2: "Tropical depression (< 34 kt)"
+            3: "Tropical storm (34-47 kt)"
+            4: "Severe tropical storm (48-63 kt)"
+            5: "Typhoon (>= 64 kt)"
+            6: "WP only: extratropical cyclone"
+            7: "WP only: just entering the JMA area of responsibility (171 rows)"
+          example: 5
+
+        - index: 5
+          name: "lat"
+          type: "float"
+          description: "Center latitude (negative in the Southern Hemisphere)"
+          unit: "degrees_north"
+          range: {min: -48.5, max: 69.0}
+
+        - index: 6
+          name: "lng"
+          type: "float"
+          description: "Center longitude, 0-360 degrees east (values above 180 occur)"
+          unit: "degrees_east"
+          range: {min: 38.09, max: 212.1}
+
+        - index: 7
+          name: "pressure"
+          type: "float"
+          description: "Central pressure"
+          unit: "hPa"
+          range: {min: 870.0, max: 1018.0}
+          missing_values: [-1]   # one AU sequence (367 rows, 169 with images); pyphoon3 skips these when pressure is the label
+
+        - index: 8
+          name: "wind"
+          type: "float"
+          description: "Maximum sustained wind speed"
+          unit: "kt"
+          range: {min: 0.0, max: 140.0}
+          missing_values: [0]   # no wind value: WP grades 2 and 6 among others; AU grade 0. pyphoon3 does NOT skip these.
+
+        - index: 9
+          name: "dir50"
+          type: "integer"
+          description: "Direction of the longest radius of 50 kt winds (JMA best-track format)"
+          unit: null
+          values:
+            0: "No 50 kt wind area / no data"
+            1: "Northeast"
+            2: "East"
+            3: "Southeast"
+            4: "South"
+            5: "Southwest"
+            6: "West"
+            7: "Northwest"
+            8: "North"
+            9: "No direction (circular). In AU every row is 9 with radii 0, meaning no data"
+
+        - index: 10
+          name: "long50"
+          type: "integer"
+          description: "Longest radius of 50 kt winds (JMA best-track format)"
+          unit: "nmi"
+          range: {min: 0, max: 325}
+          missing_values: [0]
+
+        - index: 11
+          name: "short50"
+          type: "integer"
+          description: "Shortest radius of 50 kt winds (JMA best-track format)"
+          unit: "nmi"
+          range: {min: 0, max: 250}
+          missing_values: [0]
+
+        - index: 12
+          name: "dir30"
+          type: "integer"
+          description: "Direction of the longest radius of 30 kt winds (codes as for dir50)"
+          unit: null
+          values:
+            0: "No 30 kt wind area / no data"
+            1: "Northeast"
+            2: "East"
+            3: "Southeast"
+            4: "South"
+            5: "Southwest"
+            6: "West"
+            7: "Northwest"
+            8: "North"
+            9: "No direction (circular). In AU every row is 9 with radii 0, meaning no data"
+
+        - index: 13
+          name: "long30"
+          type: "integer"
+          description: "Longest radius of 30 kt winds (JMA best-track format)"
+          unit: "nmi"
+          range: {min: 0, max: 850}
+          missing_values: [0]
+
+        - index: 14
+          name: "short30"
+          type: "integer"
+          description: "Shortest radius of 30 kt winds (JMA best-track format)"
+          unit: "nmi"
+          range: {min: 0, max: 600}
+          missing_values: [0]
+
+        - index: 15
+          name: "landfall"
+          type: "integer"
+          description: "Landfall or passage indicator (JMA best-track format)"
+          unit: null
+          values:
+            0: "No landfall or passage"
+            1: "Landfall or passage (WP only, 258 rows; AU is always 0)"
+
+        - index: 16
+          name: "intp"
+          type: "integer"
+          description: "Position (lat/lng) interpolation flag; says nothing about wind or pressure (pyphoon3 label name: 'interpolated')"
+          unit: null
+          values:
+            0: "Position from the original best track"
+            1: "Position interpolated to hourly resolution"
+          note: "In WP the other fields are interpolated at the same hours, so the flag effectively marks the whole row. In AU, wind and pressure can be interpolated in rows with intp = 0 (e.g. 200711, 2007-03-08 04-05 UTC: intp = 0, but pressure 930 -> 928 -> 926 -> 924 hPa and wind 90 -> 91.7 -> 93.3 -> 95 kt are linear)."
+
+        - index: 17
+          name: "file_{channel}"
+          type: "string"
+          description: "Image file name (e.g. column file_1). pyphoon3 label name: 'filename'"
+          unit: null
+          nullable: true   # empty for hours without an image
+          example: "2025112312-202527-HMW9-1.h5"
+
+        - index: 18
+          name: "mask_{channel}"
+          type: "float"
+          description: "Number of masked pixels in the image (e.g. column mask_1): fill pixels and pixels beyond the edge of the Earth's disk; corrupted scan lines are not counted"
+          unit: "pixels"
+          range: {min: 0, max: 131082}
+          nullable: true
+
+        - index: 19
+          name: "mask_{channel}_pct"
+          type: "float"
+          description: "Fraction of masked pixels = mask_N / 262144. Despite the name, a fraction from 0 to 1, not a percentage."
+          unit: "1 (fraction)"
+          range: {min: 0.0, max: 0.510979}
+          nullable: true
+          # 174 images exceed 0.3 in V3-2025.R2 (known issue; see dataset.yaml caveats)
+
+    sample: |
+      year,month,day,hour,grade,lat,lng,pressure,wind,dir50,long50,short50,dir30,long30,short30,landfall,intp,file_1,mask_1,mask_1_pct
+      2025,11,23,12,2,7.40,131.60,1004.0,0.0,0,0,0,0,0,0,0,0,2025112312-202527-HMW9-1.h5,0,0.000000
+      2025,11,23,13,2,7.44,131.34,1003.7,0.0,0,0,0,0,0,0,0,1,2025112313-202527-HMW9-1.h5,0,0.000000
+
+  # --- Sequence list (JSON) ---
+  - name: "metadata_json"
+    format: "json"
+    encoding: "utf-8"
+
+    json_spec:
+      structure: "object"
+      key_pattern: "{sequence_id}"
+      entry_schema:
+        id:
+          type: "string"
+          description: "Sequence ID (YYYYNN)"
+        number:
+          type: "integer"
+          description: "Cyclone number within the season"
+        season:
+          type: "integer"
+          description: "Season year. AU seasons run from July to June and are labelled by the ending year (e.g. 199002 starts in 1989-12, season 1990)"
+        name:
+          type: "string"
+          description: "Cyclone name; 'noname' if it has none"
+        start:
+          type: "string"
+          format: "YYYY-MM-DD"
+          description: "Start date"
+        end:
+          type: "string"
+          format: "YYYY-MM-DD"
+          description: "End date"
+        images:
+          type: "integer"
+          description: "Number of images (not track rows)"
+    sample: |
+      {"199016": {"images": 151, "id": "199016", "season": 1990, "start": "1990-08-24", "number": 16, "name": "BECKY", "end": "1990-08-30"}}
+
+  # --- Images with substituted conversion ---
+  - name: "substituted_conversion"
+    format: "csv"
+    encoding: "utf-8"
+
+    filename:
+      pattern: "substituted_conversion.csv"
+      example: "substituted_conversion.csv"
+
+    csv_spec:
+      delimiter: ","
+      has_header: true
+      columns:
+        - index: 0
+          name: "basin"
+          type: "string"
+          description: "Basin"
+          values:
+            WP: "Western North Pacific"
+            AU: "Australian region"
+        - index: 1
+          name: "channel"
+          type: "integer"
+          description: "Channel number"
+          unit: null
+          range: {min: 1, max: 4}
+        - index: 2
+          name: "sequence"
+          type: "string"   # pandas reads it as an integer; it is a sequence ID (YYYYNN)
+          description: "Sequence ID"
+        - index: 3
+          name: "filename"
+          type: "string"
+          description: "Image file name (can be passed to ignore_list as is)"
+        - index: 4
+          name: "satellite"
+          type: "string"
+          description: "Satellite code (MTS2, GMS2, GMS4, GMS5 in this file)"
+        - index: 5
+          name: "observation_time"
+          type: "datetime"
+          description: "Observation time 'YYYY-MM-DD HH:MM' (UTC)"
+        - index: 6
+          name: "substitution"
+          type: "string"
+          description: "Kind of substitution"
+          values:
+            recalibration: "Recalibration coefficients of the observation date were missing; those of another date were used (1,463 images; channels 1-3; GMS2 1984, GMS4 1989, MTS2 2009 and 2012)"
+            conversion_table: "GMS5 channel 2/3 images at 02 UTC converted with the 01 UTC table of the same day (14 images, 1995-1997)"
+        - index: 7
+          name: "source_date"
+          type: "string"   # 'YYYY-MM-DD' for recalibration, 'YYYY-MM-DD HH:MM' for conversion_table; pd.to_datetime needs format='mixed'
+          description: "Date (or time) of the coefficients or conversion table used"
+        - index: 8
+          name: "difference_days"
+          type: "integer"
+          description: "source_date minus observation date, in days. Negative: an earlier date. Positive: observations before the satellite's first coefficient date use that date (GMS4 1989-12-14, MTS2 2010-07-01). Always 0 for conversion_table."
+          unit: "days"
+          range: {min: -188, max: 222}
+    sample: |
+      basin,channel,sequence,filename,satellite,observation_time,substitution,source_date,difference_days
+      AU,1,199002,1989121300-199002-GMS4-1.h5,GMS4,1989-12-13 00:00,recalibration,1989-12-14,1
+
+ml_tasks:
+  - name: "Pressure Regression"
+    type: "regression"
+    description: "Estimate central pressure from satellite images (the V3 paper's benchmark)"
+    input: "h5 image (1, 512, 512) or (C, 512, 512), clipped to [170, 300] K and scaled to [0, 1]"
+    output: "pressure (hPa)"
+    labels_config: "labels='pressure'"
+    notes: "Benchmark: ResNet-18/50 (ImageNet weights), MSE loss, Adam (lr 1e-4), batch size 16, 50 epochs, SS-L2 split. WP channel 1, ResNet-18, full images: evaluation RMSE 6.56 ± 0.06 hPa (R1, 5 runs)."
+
+  - name: "Wind Speed Regression"
+    type: "regression"
+    description: "Estimate maximum wind speed from satellite images"
+    input: "h5 image"
+    output: "wind (kt)"
+    labels_config: "labels='wind'"
+    notes: "wind = 0 (no value) is not skipped, and AU grade 0 rows can carry interpolated wind. To train on observed wind only: filter_func=lambda img: img.wind() > 0 and img.grade() != 0"
+
+  - name: "Intensity Classification"
+    type: "classification"
+    description: "Classify intensity grade from satellite images"
+    input: "h5 image"
+    output: "grade (WP: 2-7, AU: 0, 2-5)"
+    labels_config: "labels='grade'"
+    notes: "Grades 6 and 7 (WP) and 0 (AU: wind missing) are not intensity classes; consider excluding or merging them."
+
+  - name: "Multi-spectral Regression"
+    type: "regression"
+    description: "Estimate intensity from several channels"
+    input: "several channels via image_dirs etc. (C, 512, 512)"
+    output: "pressure or wind"
+    labels_config: "labels='pressure', image_dirs=[...], metadata_dirs=[...], metadata_jsons=[...]"
+    notes: "Channels 2 and 3 start in 1995 and channel 4 in 2005. Only times with all channels are kept, so the period is shorter."
+
+  - name: "Location Estimation"
+    type: "regression"
+    description: "Estimate the cyclone center from satellite images"
+    input: "h5 image"
+    output: "lat, lng (degrees)"
+    labels_config: "labels=('lat', 'lng')"
+
+caveats:
+  - item: "Avoid leakage when splitting"
+    detail: "split_dataset_by defaults to 'image', which puts images of the same cyclone in both training and evaluation. Use split_by='sequence' or a season split (SS-L2: 2024-2025 for evaluation)."
+    severity: "critical"
+
+  - item: "Missing labels are handled differently per column"
+    detail: "pyphoon3 skips only images whose label is -1. AU pressure = -1 is skipped, but wind = 0 and wind radii of 0 (no data) are kept as valid values."
+    severity: "warning"
+
+  - item: "Images with substituted conversion (substituted_conversion.csv)"
+    detail: "1,477 images in R2 were converted with the coefficients or conversion table of another date or time because those of the observation were missing. The effect on the accuracy of their brightness temperatures is not known. To exclude them, pass their file names to ignore_list (for several channels, the names without the channel suffix)."
+    severity: "warning"
+
+  - item: "AU track data is partly missing"
+    detail: "In AU, dir50/dir30 are always 9, the wind radii always 0 and landfall always 0 (no data). Grade 0 marks cyclones whose original wind speed is missing (13 sequences, 610 rows): 586 rows have wind = 0, and 24 rows (200703, 200711, 200822) carry wind linearly interpolated from neighbouring rows. 15 of these 24 rows have intp = 0, because intp flags the position only, so intp cannot exclude the interpolated wind; pressure can be interpolated in the same way. To use observed wind only, exclude AU grade 0 (filter_func=lambda img: img.grade() != 0)."
+    severity: "warning"
+
+  - item: "AU season definition"
+    detail: "AU seasons run from July to June and are labelled by the ending year, so the season can differ from the observation year (an image of December 1989 belongs to season 1990)."
+    severity: "info"
+
+  - item: "Longitude is 0-360 degrees east"
+    detail: "lng exceeds 180 (WP up to 188.0, AU up to 212.1). Take care when converting to -180..180."
+    severity: "info"
+
+  - item: "CSV header names differ from pyphoon3 label names"
+    detail: "CSV: intp / file_N / mask_N / mask_N_pct; pyphoon3: interpolated / filename / mask_1 / mask_1_percent. pyphoon3 reads columns by position; mask_1() returns column 18 (mask_N) whatever the channel."
+    severity: "info"
+
+  - item: "mask_N_pct is a fraction"
+    detail: "Despite the name, mask_N_pct is mask_N / 262144, from 0 to 1."
+    severity: "info"
+
+  - item: "Track rows outnumber images"
+    detail: "Track rows are hourly, but some hours have no image (images around 1978 are 3-hourly). Those rows have empty file_N and are not part of the dataset. metadata.json 'images' counts images."
+    severity: "info"
+
+  - item: "The spectrum argument"
+    detail: "Renamed from 'Infrared' (pyphoon2) to 'Data' (pyphoon3). pyphoon3 reads the first dataset in the h5 file, so the value has no practical effect."
+    severity: "info"
+
+  - item: "Flagged images are an R1 matter"
+    detail: "get_flagged_files() and exclude_flagged target the blank or mostly missing images of R1; R2 has none. The first call reads the size of every image file, which is slow on a network file system."
+    severity: "info"
+
+  - item: "I/O load"
+    detail: "WP channel 1 reads about 200 GB per epoch; keep the dataset on a fast local disk. load_data_into_memory='all_data' needs a lot of memory."
+    severity: "warning"
+
+  - item: "Items following the JMA best-track format"
+    detail: "The wind-radius unit (nmi), the dir50/dir30 codes and the meaning of landfall follow the JMA best-track format; they are not documented by the dataset itself."
+    severity: "info"
